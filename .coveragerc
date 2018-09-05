@@ -1,0 +1,3 @@
+[run]
+source = tng3_starter
+omit = tng3_starter/test*
