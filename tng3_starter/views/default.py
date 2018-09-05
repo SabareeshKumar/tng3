@@ -1,33 +1,19 @@
-from pyramid.response import Response
-from pyramid.view import view_config
+from cornice import Service
 
-from sqlalchemy.exc import DBAPIError
+_USERS = {}
 
-from ..models import MyModel
+users = Service(name='users', pyramid_route='home', description="User registration")
 
+@users.get()
+def get_users(request):
+    """Returns a list of all users."""
+    return {'users': list(_USERS)}
 
-@view_config(route_name='home', renderer='../templates/mytemplate.jinja2')
-def my_view(request):
-    try:
-        query = request.dbsession.query(MyModel)
-        one = query.filter(MyModel.name == 'one').first()
-    except DBAPIError:
-        return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'tng3_starter'}
+@users.post()
+def create_user(request):
+    """Adds a new user."""
+    user = {}
+    user['name'] = request.text
 
-
-db_err_msg = """\
-Pyramid is having a problem using your SQL database.  The problem
-might be caused by one of the following things:
-
-1.  You may need to run the "initialize_tng3_starter_db" script
-    to initialize your database tables.  Check your virtual
-    environment's "bin" directory for this script and try to run it.
-
-2.  Your database server may not be running.  Check that the
-    database server referred to by the "sqlalchemy.url" setting in
-    your "development.ini" file is running.
-
-After you fix the problem, please restart the Pyramid application to
-try it again.
-"""
+    _USERS[user['name']] = user['name']
+    return {'users': list(_USERS)}
