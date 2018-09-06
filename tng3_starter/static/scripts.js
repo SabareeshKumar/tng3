@@ -8,7 +8,7 @@ $(document).ready(function(){
           'mail_id' : $('#mail_id').val()
         },
         function(data,status){
-            $("#div1").text("User added");
+	    $("#div1").text(data['message']);
         });
     });
     
