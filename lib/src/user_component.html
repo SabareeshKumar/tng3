@@ -1,0 +1,16 @@
+<div *ngIf="user != null">
+  <h2>{{user.name}}</h2>
+  <div><label>id: </label>{{user.id}}</div>
+  <div>
+    <label>name: </label>
+    <input [(ngModel)]="user.name" placeholder="name">
+  </div>  
+  <div>
+    <label>age: </label>
+    <input [(ngModel)]="user.age" placeholder="age">
+  </div>
+  <div>
+    <label>email_id: </label>
+    <input [(ngModel)]="user.email_id" placeholder="email_id">
+  </div>
+</div>
