@@ -1,0 +1,4 @@
+label,button {
+    float: left;
+    clear: left;
+}

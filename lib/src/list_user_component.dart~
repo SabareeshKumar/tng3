@@ -1,0 +1,21 @@
+import 'package:angular/angular.dart';
+import 'package:angular_forms/angular_forms.dart';
+import 'package:angular_router/angular_router.dart';
+
+import 'user.dart';
+
+@Component(
+  selector: 'add-user',
+  templateUrl: 'list_user_component.html',
+  styleUrls: ['user_component.css'],
+  directives: [coreDirectives, formDirectives],
+)
+class ListUserComponent {
+  
+  User user;
+
+  void add(String name) {
+  
+  }
+}
+	
