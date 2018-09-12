@@ -24,16 +24,18 @@ class ListUserComponent implements OnInit {
   User selected;
   
   ListUserComponent(this._userService, this._router);
-
-  void ngOnInit() => users = _userService.getAll();
-
+  
+  void ngOnInit() async {
+    users = await _userService.getAll();
+  }
+       
   void onSelect(User user) {
        selected = user;
        _router.navigate(RoutePaths.edit.toUrl(parameters: {idParam: '${selected.id}'}));
   }
 
-  void delete(User user) {
-       _userService.delete(user);
+  void delete(User user) async {
+       users = await _userService.delete(user);
        selected = null;
   }  
 }
