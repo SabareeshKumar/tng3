@@ -66,6 +66,6 @@ def update_user(request):
     except colander.Invalid as e:
         return {'message': e.asdict()}
 
-@view_config(route_name='home', renderer='../../../hero_dart/web/index.html')
+@view_config(route_name='home', renderer='../../client/output/web/index.html')
 def home(request):
     return {}

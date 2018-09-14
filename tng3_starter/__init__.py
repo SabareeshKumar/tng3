@@ -11,5 +11,5 @@ def main(global_config, **settings):
     config.include('.models')
     config.include('.routes')
     config.scan()    
-    config.add_static_view(name='/', path='/home/sandbox/hero_dart/web')
+    config.add_static_view(name='/', path='../client/output/web')
     return config.make_wsgi_app()
