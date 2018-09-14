@@ -1,0 +1,9 @@
+<div>
+  <h3> Add User </h3>
+  <label>user name:</label> <input #userName /><div class="error" *ngIf="error_message != null">{{error_message["name"]}} </div>
+  <label>age:</label> <input #age/><div class="error" *ngIf="error_message != null">{{error_message["age"]}} </div>
+  <label>email id:</label> <input #mailId /><div class="error" *ngIf="error_message != null">{{error_message["email_id"]}} </div>
+  <button (click)="add(userName.value, age.value, mailId.value)">
+    Add
+  </button>
+</div>
