@@ -1,7 +1,7 @@
 <div>
   <h3> Add User </h3>
   <label>user name:</label> <input #userName />
-  <label>age:</label> <input #age />
+  <label>age:</label> <input #age type="number"/>
   <label>email id:</label> <input #mailId />
   <button (click)="add(userName.value, age.value, mailId.value);
 		   userName.value=''; age.value=''; mailId.value=''">
