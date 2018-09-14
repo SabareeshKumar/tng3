@@ -33,19 +33,39 @@ def create_user(request):
         schema.deserialize(user_data)
         user = User(user_data)
         request.dbsession.add(user)
-        return {'message':'User added'}
     except colander.Invalid as e:
-        print(str(e))
-        return {'message': str(e)}
+        return {'message': e.asdict()}
 
 @user.delete()
 def delete_user(request):
     id = request.matchdict['id'] 
-    dbSession = request.dbsession.query(User)
-    dbSession.filter(User.id == id).delete()
-    user_list = dbSession.filter().all()
+    query = request.dbsession.query(User)
+    query.filter(User.id == id).delete()
+    user_list = query.filter().all()
     return {'data': user_list}
-    
+
+@user.get()
+def get_user(request):
+    id = request.matchdict['id']
+    query = request.dbsession.query(User)
+    user = query.filter(User.id == id).first()
+    return {'data': user}
+
+@user.put()
+def update_user(request):
+    user_data = request.json_body
+    schema = UserSchema()
+    try:
+        schema.deserialize(user_data)
+        id = request.matchdict['id'] 
+        query = request.dbsession.query(User)
+        user = query.filter(User.id == id).first()
+        user.name = user_data['name']
+        user.age = user_data['age']
+        user.email_id = user_data['email_id']
+    except colander.Invalid as e:
+        return {'message': e.asdict()}
+
 @view_config(route_name='home', renderer='../../../hero_dart/web/index.html')
 def home(request):
     return {}
