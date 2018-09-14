@@ -14,18 +14,19 @@ import 'user_service.dart';
 )
 class AddUserComponent {
   
-  User user;
-
+  Map<String, dynamic> error_message;
   final UserService _userService;
   final Location _location;
-  
+
   AddUserComponent(this._userService, this._location);
 
   void _goBack() => _location.back();
   
-  void add(String name, String age, String emailId) {
-       _userService.add(name, age, emailId);
-       _goBack();
+  void add(String name, String age, String email_id) async {
+    error_message = await _userService.add(name, age, email_id);
+    if (error_message == null) {
+      _goBack();
+    }
   }
 }
 	

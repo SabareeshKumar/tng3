@@ -1,4 +1,3 @@
-
 import 'package:angular/angular.dart';
 import 'package:http/http.dart';
 
@@ -31,14 +30,24 @@ class UserService {
 
   dynamic _extractData(Response resp) => json.decode(resp.body)['data'];
 
+  getErrorMessage(Response resp) {
+    var response = json.decode(resp.body);
+     if (response != null) {
+       return response['message'];
+    }
+  }
+  
   Exception _handleError(dynamic e) {
     print(e);
     return Exception('Server error; cause: $e');
   }
-  void add(String name, String age, String emailId) async {
+  
+  add(String name, String age, String email_id) async {
     try {
       final response = await _http.post(_usersUrl,
-          headers: _headers, body: json.encode({'name': name, 'age': age, 'email_id': emailId }));
+          headers: _headers, body: json.encode({"name": name, "age": age, "email_id": email_id}));
+      return getErrorMessage(response);
+      
     } catch (e) {
       throw _handleError(e);
     }
@@ -68,10 +77,11 @@ class UserService {
     }
   }
   
-  Future<void> update(User user) async {
+   update(User user) async {
     try {
       final url = '$_usersUrl/${user.id}';
       final response = await _http.put(url, headers: _headers, body: json.encode(user));
+      return getErrorMessage(response);
     } catch (e) {
       throw _handleError(e);
     }

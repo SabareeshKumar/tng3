@@ -18,7 +18,7 @@ class UserComponent implements OnActivate {
   User user;
 
   final UserService _userService;
-
+  Map<String, dynamic> error_message;
   final Location _location;
   final Router _router;
   
@@ -35,8 +35,10 @@ class UserComponent implements OnActivate {
   void goBack() => _location.back();
 
   void save() async {
-       await _userService.update(user);
-       _router.navigate(RoutePaths.users.toUrl());
+       error_message = await _userService.update(user);
+       if (error_message == null) {
+         _router.navigate(RoutePaths.users.toUrl());
+       }
   }
 }
 	

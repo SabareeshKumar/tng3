@@ -4,14 +4,17 @@
   <div>
     <label>name: </label>
     <input [(ngModel)]="user.name" placeholder="name">
+    <p class="error" *ngIf="error_message != null">{{error_message["name"]}} </p>
   </div>  
   <div>
     <label>age: </label>
-    <input [(ngModel)]="user.age" type="number" placeholder="age">
+    <input [(ngModel)]="user.age" placeholder="age">
+    <p class="error" *ngIf="error_message != null">{{error_message["age"]}} </p>
   </div>
   <div>
     <label>email_id: </label>
     <input [(ngModel)]="user.email_id" placeholder="email_id">
+    <p class="error" *ngIf="error_message != null">{{error_message["email_id"]}} </p>
   </div>
   <div>
     <button (click)="save()">Save</button>
