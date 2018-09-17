@@ -5,13 +5,13 @@ import 'package:angular_router/angular_router.dart';
 import 'user.dart';
 import 'user_service.dart';
 import 'route_paths.dart';
-import 'user_component.dart';
+import 'edit_user_component.dart';
 
 @Component(
   selector: 'list-user',
   templateUrl: 'list_user_component.html',
   styleUrls: ['list_user_component.css'],
-  directives: [coreDirectives, formDirectives, UserComponent],
+  directives: [coreDirectives, formDirectives, EditUserComponent],
 )
 class ListUserComponent implements OnInit {
   

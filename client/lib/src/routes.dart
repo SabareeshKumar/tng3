@@ -3,7 +3,7 @@ import 'package:angular_router/angular_router.dart';
 import 'route_paths.dart';
 import 'list_user_component.template.dart' as list_user_template;
 import 'add_user_component.template.dart' as add_user_template;
-import 'user_component.template.dart' as edit_user_template;
+import 'edit_user_component.template.dart' as edit_user_template;
 //import 'delete_user_component.template.dart' as delete_user_template;
 //import 'hero_component.template.dart' as hero_template;
 export 'route_paths.dart';
@@ -21,7 +21,7 @@ class Routes {
 
  static final edit = RouteDefinition(
   	 routePath: RoutePaths.edit,
-	 component: edit_user_template.UserComponentNgFactory,
+	 component: edit_user_template.EditUserComponentNgFactory,
 	 );
 
 /*

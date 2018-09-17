@@ -9,11 +9,11 @@ import 'list_user_component.dart';
 
 @Component(
   selector: 'my-user',
-  templateUrl: 'user_component.html',
-  styleUrls: ['user_component.css'],
+  templateUrl: 'edit_user_component.html',
+  styleUrls: ['edit_user_component.css'],
   directives: [coreDirectives, formDirectives, ListUserComponent],
 )
-class UserComponent implements OnActivate {
+class EditUserComponent implements OnActivate {
   
   User user;
 
@@ -22,7 +22,7 @@ class UserComponent implements OnActivate {
   final Location _location;
   final Router _router;
   
-  UserComponent(this._userService, this._location, this._router);
+  EditUserComponent(this._userService, this._location, this._router);
   
   @override
   void onActivate(_, RouterState current) async {
