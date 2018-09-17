@@ -10,6 +10,6 @@ def main(global_config, **settings):
     config.add_jinja2_renderer('.html')
     config.include('.models')
     config.include('.routes')
-    config.scan()    
-    config.add_static_view(name='/', path='../client/output/web')
+    config.scan()
+    config.add_static_view(name='/', path=settings['client_package'])
     return config.make_wsgi_app()
