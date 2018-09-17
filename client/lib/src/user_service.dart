@@ -9,7 +9,7 @@ import 'route_paths.dart';
 
 class UserService {
 
-  static const _usersUrl = 'users';
+  static const _usersUrl = '/api/users';
   static final _headers = {'Content-Type': 'application/json'};
 
   final Client _http;
