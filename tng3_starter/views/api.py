@@ -24,21 +24,16 @@ def get_users(request):
     user_list = request.dbsession.query(User).filter().all()
     return {'data': user_list}
 
-@user_collection.post()
+@user_collection.post(schema=UserSchema(), validators=(colander_body_validator,))
 def create_user(request):
     """Adds a new user."""
-    user_data = request.json_body
-    schema = UserSchema()
-    try:
-        schema.deserialize(user_data)
-        user = User(user_data)
-        request.dbsession.add(user)
-    except colander.Invalid as e:
-        return {'message': e.asdict()}
+    user = User(request.validated)
+    request.dbsession.add(user)
+    return {'user': user}
 
 @user.delete()
 def delete_user(request):
-    id = request.matchdict['id'] 
+    id = request.matchdict['id']
     query = request.dbsession.query(User)
     query.filter(User.id == id).delete()
     user_list = query.filter().all()
@@ -57,7 +52,7 @@ def update_user(request):
     schema = UserSchema()
     try:
         schema.deserialize(user_data)
-        id = request.matchdict['id'] 
+        id = request.matchdict['id']
         query = request.dbsession.query(User)
         user = query.filter(User.id == id).first()
         user.name = user_data['name']

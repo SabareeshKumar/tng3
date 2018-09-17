@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:collection';
 
 import 'user.dart';
 import 'route_paths.dart';
@@ -32,8 +33,8 @@ class UserService {
 
   getErrorMessage(Response resp) {
     var response = json.decode(resp.body);
-     if (response != null) {
-       return response['message'];
+    if (response.containsKey('errors')) {
+       return response['errors'];
     }
   }
   
@@ -43,14 +44,19 @@ class UserService {
   }
   
   add(String name, String age, String email_id) async {
-    try {
-      final response = await _http.post(_usersUrl,
-          headers: _headers, body: json.encode({"name": name, "age": age, "email_id": email_id}));
-      return getErrorMessage(response);
+      var response;
+      try {
+          response = await _http.post(_usersUrl,
+                                      headers: _headers,
+                                      body: json.encode({"name": name,
+                                                         "age": age,
+                                                         "email_id": email_id}));
+          
+          return getErrorMessage(response);
       
-    } catch (e) {
-      throw _handleError(e);
-    }
+      } catch (e) {
+          throw _handleError(e);
+      }
   }
 
   Future<List<User>> delete(User user) async {
