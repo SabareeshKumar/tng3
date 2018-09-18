@@ -2,10 +2,10 @@ import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 
+import 'edit_user_component.dart';
+import 'route_paths.dart';
 import 'user.dart';
 import 'user_service.dart';
-import 'route_paths.dart';
-import 'edit_user_component.dart';
 
 @Component(
   selector: 'list-user',
@@ -15,31 +15,27 @@ import 'edit_user_component.dart';
 )
 class ListUserComponent implements OnInit {
   
-    List<User> users;
-
-    final UserService _userService;
-
-    final Router _router;
+  final UserService _userService;
+  final Router _router;
+  List<User> users;
+  User selected;
   
-    User selected;
+  ListUserComponent(this._userService, this._router);
   
-    ListUserComponent(this._userService, this._router);
-  
-    void ngOnInit() async {
-        users = await _userService.getAll();
-    }
+  void ngOnInit() async {
+    users = await _userService.getAll();
+  }
        
-    void onSelect(User user) {
-        selected = user;
-        var edit_route = RoutePaths.edit
-            .toUrl(parameters: {idParam: '${selected.id}'});
-        _router.navigate(edit_route);
-    }
+  void onSelect(User user) {
+    selected = user;
+    var editRoute = RoutePaths.edit
+      .toUrl(parameters: {idParam: '${selected.id}'});
+    _router.navigate(editRoute);
+  }
 
-    void delete(User user) async {
-        await _userService.delete(user);
-        selected = null;
-        users = await _userService.getAll();
-    }  
+  void delete(User user) async {
+    await _userService.delete(user);
+    selected = null;
+    users = await _userService.getAll();
+  }  
 }
-	

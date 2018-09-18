@@ -1,10 +1,10 @@
 <div>
   <ul class="users">
     <li *ngFor="let user of users"
-	(click)="onSelect(user)">
+        (click)="onSelect(user)">
       <span class="badge">{{user.id}}</span> {{user.name}}
       <button class="delete"
-	      (click)="delete(user); $event.stopPropagation()">x</button>
+              (click)="delete(user); $event.stopPropagation()">x</button>
     </li>
   </ul>
 </div>

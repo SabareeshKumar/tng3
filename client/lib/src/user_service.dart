@@ -1,19 +1,20 @@
+import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:angular/angular.dart';
 import 'package:http/http.dart';
 
-import 'dart:async';
-import 'dart:convert';
-import 'dart:collection';
-
-import 'user.dart';
 import 'route_paths.dart';
+import 'user.dart';
 
 class UserService {
 
+  static const successCode = 200;
   static const _usersUrl = '/api/users';
   static final _headers = {'Content-Type': 'application/json'};
   final Client _http;  
-
+  
   String _globalError = "";
   Map<String, String> _fieldErrors = {};
 
@@ -57,18 +58,17 @@ class UserService {
     }
   }
 
-  Future<bool> add(String name, String age, String email_id) async {
-    var response;
-    var data = json.encode({"name": name,
-                            "age": age,
-                            "email_id": email_id});
+  Future<bool> add(String name, String age, String emailId) async {
     try {
-      response = await _http.post(
+      var data = json.encode({"name": name,
+                              "age": age,
+                              "email_id": emailId});
+      final response = await _http.post(
         _usersUrl,
         headers: _headers,
         body: data);
       
-      if (response.statusCode == 200) {
+      if (response.statusCode == successCode) {
         return true;
       }
       _extractErrorResponse(response);
@@ -91,7 +91,7 @@ class UserService {
     try {
       final url = '$_usersUrl/$id';
       final response = await _http.get(url);
-      if (response.statusCode == 200) {
+      if (response.statusCode == successCode) {
         final User user = User.fromJson(_extractData(response));
         return user;
       }
@@ -103,17 +103,16 @@ class UserService {
   }
   
   Future<bool> update(int id, String name, String age, String emailId) async {
-    var response;
     try {
       final url = '$_usersUrl/$id';
       var data = json.encode({"name": name,
                               "age": age,
                               "email_id": emailId});
-      response = await _http.put(
+      final response = await _http.put(
         url,
         headers: _headers,
         body: data);
-      if (response.statusCode == 200) {
+      if (response.statusCode == successCode) {
         return true;
       }
       _extractErrorResponse(response);

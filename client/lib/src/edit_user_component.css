@@ -17,6 +17,10 @@ input {
     margin: 0 50px;
     float: left;
 }
+div {
+    float: left;
+    clear: left;
+}
 button {
     margin-top: 20px;
     font-family: Arial;
@@ -33,10 +37,6 @@ button:disabled {
     background-color: #eee;
     color: #ccc;
     cursor: auto;
-}
-div {
-    float: left;
-    clear: left;
 }
 .error {
     display: inline-block;

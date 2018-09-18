@@ -1,14 +1,14 @@
-import logging
-import colander
-
-from pyramid.view import view_config
-from pyramid.response import Response
 from cornice import Service
-from cornice.validators import colander_body_validator, colander_path_validator
 from pyramid.renderers import render_to_response
+from pyramid.response import Response
+from cornice.validators import colander_body_validator, colander_path_validator
+from pyramid.view import view_config
+
 from ..models import User
 
+import colander
 import json
+import logging
 
 class UserSchema(colander.MappingSchema):
     name = colander.SchemaNode(colander.String())
@@ -44,7 +44,7 @@ def delete_user(request):
         request.errors.add("header", "id", "User does not exist!")
     else:
         user.delete()
-    return {}
+    return None
 
 @user.get(schema = IdSchema(), validators=(colander_path_validator,))
 def get_user(request):

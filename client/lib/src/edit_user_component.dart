@@ -2,10 +2,10 @@ import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 
+import 'list_user_component.dart';
+import 'route_paths.dart';
 import 'user.dart';
 import 'user_service.dart';
-import 'route_paths.dart';
-import 'list_user_component.dart';
 
 @Component(
   selector: 'my-user',
@@ -20,16 +20,14 @@ import 'list_user_component.dart';
 )
 class EditUserComponent implements OnActivate {
   
-  User user;
-
   final UserService _userService;
-  Map<String, dynamic> error_message = {};
   Router _router;
   Location _location;
-
+  Map<String, String> _fieldErrors;
+  
+  User user;
   bool hasError = false;
   String globalError;
-  Map<String, String> _fieldErrors;
 
   EditUserComponent(this._userService, this._router, this._location);
   
@@ -60,6 +58,7 @@ class EditUserComponent implements OnActivate {
       _router.navigate(home_route);
       return;
     }
+    
     hasError = true;
     globalError = _userService.globalError;
     _fieldErrors = _userService.fieldErrors;
@@ -71,4 +70,3 @@ class EditUserComponent implements OnActivate {
 
   String fieldError(String fieldName) => _fieldErrors[fieldName];
 }
-	

@@ -1,8 +1,8 @@
 import 'package:angular/angular.dart';
-
 import 'package:angular_router/angular_router.dart';
-import 'src/routes.dart';
+
 import 'src/route_paths.dart';
+import 'src/routes.dart';
 import 'src/user_service.dart';
 
 @Component(
@@ -13,5 +13,5 @@ import 'src/user_service.dart';
   providers: [ClassProvider(UserService)],
 )
 class AppComponent {
-  var name = 'Users';
+  var title = 'Users';
 }
