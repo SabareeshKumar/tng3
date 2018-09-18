@@ -7,31 +7,28 @@
   </div>
   <div *ngIf="user != null">
     <h2>{{user.name}}</h2>
-    <div><label>id: {{user.id}}</label></div>
     <div>
-      <label>name: </label>
-      <input #name value="{{user.name}}" placeholder="name">
-      <p class="error" *ngIf="hasError && hasFieldError('name')">
-        {{fieldError("name")}}
-      </p>
+      <material-input [(ngModel)]="user.name"
+                      label="user name" type="text"
+                      error="{{getError('name')}}"
+                      required>
+      </material-input>
+      <material-input [(ngModel)]="user.age"
+                      label="age"
+                      type="number"
+                      error="{{getError('age')}}"
+                      required>
+      </material-input>
+      <material-input [(ngModel)]="user.emailId"
+                      label="email id"
+                      type="text"
+                      error="{{getError('email_id')}}"
+                      required>
+      </material-input>
     </div>
-    <div>
-      <label>age: </label>
-      <input #age value="{{user.age}}" placeholder="age">
-      <p class="error" *ngIf="hasError && hasFieldError('age')">
-        {{fieldError("age")}}
-      </p>
-    </div>
-    <div>
-      <label>email_id: </label>
-      <input #emailId value="{{user.emailId}}" placeholder="email_id">
-      <p class="error" *ngIf="hasError && hasFieldError('email_id')">
-        {{fieldError("email_id")}}
-      </p>
-    </div>
-    <div>
-      <button (click)="save(name.value, age.value, emailId.value)">Save</button>
-      <button (click)="goBack()">Back</button>
+    <div id="buttons">
+      <material-button (click)="save()" raised>Save</material-button>
+      <material-button (click)="goBack()" raised>Back</material-button>
     </div>
   </div>
 </div>

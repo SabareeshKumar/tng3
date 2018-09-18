@@ -1,6 +1,9 @@
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
+import 'package:angular_components/material_input/material_input.dart';
+import 'package:angular_components/material_input/material_number_accessor.dart';
+import 'package:angular_components/material_button/material_button.dart';
 
 import 'list_user_component.dart';
 import 'route_paths.dart';
@@ -16,6 +19,9 @@ import 'user_service.dart';
     formDirectives,
     ListUserComponent,
     routerDirectives,
+    materialInputDirectives,
+    materialNumberInputDirectives,
+    MaterialButtonComponent,
   ],
 )
 class EditUserComponent implements OnActivate {
@@ -24,8 +30,19 @@ class EditUserComponent implements OnActivate {
   Router _router;
   Location _location;
   Map<String, String> _fieldErrors;
-  
+
+  @Input()
   User user;
+
+  // @Input()
+  // String userName;
+
+  // @Input()
+  // String age;
+
+  // @Input()
+  // String emailId;
+
   bool hasError = false;
   String globalError;
 
@@ -37,10 +54,13 @@ class EditUserComponent implements OnActivate {
     if (id != null) {
       final res = await _userService.get(id);
       if (res is User) {
+        print("###################");
+        print(res.name);
         user = res;
         hasError = false;
         return;
       }
+      print(res);
       hasError = true;
       user = null;
       globalError = _userService.globalError;
@@ -50,8 +70,8 @@ class EditUserComponent implements OnActivate {
 
   void goBack() => _location.back();
     
-  void save(String name, String age, String emailId) async {
-    final res = await _userService.update(user.id, name, age, emailId);
+  void save() async {
+    final res = await _userService.update(user.id, user.name, user.age.toString(), user.emailId);
     if (res) {
       hasError = false;
       var home_route = RoutePaths.users.toUrl();
@@ -69,4 +89,10 @@ class EditUserComponent implements OnActivate {
   }
 
   String fieldError(String fieldName) => _fieldErrors[fieldName];
+
+  String getError(String fieldName) {
+    if (hasError && hasFieldError(fieldName)) {
+      return fieldError(fieldName);
+    }
+  }
 }

@@ -4,27 +4,26 @@
     {{globalError}}
   </div>
   <div>
-    <label>user name:</label>
-    <input #userName />
-    <div class="error" *ngIf="hasError && hasFieldError('name')">
-      {{fieldError("name")}}
-    </div>
+    <material-input [(ngModel)]="userName"
+                    label="user name"
+                    type="text"
+                    error="{{getError('name')}}"
+                    required>
+    </material-input>
+    <material-input [(ngModel)]="age"
+                    label="age"
+                    type="text"
+                    error="{{getError('age')}}"
+                    required>
+    </material-input>
+    <material-input [(ngModel)]="emailId"
+                    label="email id"
+                    type="text"
+                    error="{{getError('email_id')}}"
+                    required>
+    </material-input>
   </div>
-  <div>
-    <label>age:</label>
-    <input #age />
-    <div class="error" *ngIf="hasError && hasFieldError('age')">
-      {{fieldError("age")}}
-    </div>
-  </div>
-  <div>
-    <label>email id:</label>
-    <input #mailId />
-    <div class="error" *ngIf="hasError && hasFieldError('email_id')">
-      {{fieldError("email_id")}}
-    </div>
-  </div>
-  <button (click)="add(userName.value, age.value, mailId.value)">
+  <material-button (click)="add" raised>
     Add
-  </button>
+  </material-button>
 </div>
