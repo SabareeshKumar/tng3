@@ -1,25 +1,36 @@
 <div>
-  <div *ngIf="error_message != null" class="error">{{error_message["id"]}}</div>
+  <div id="global_errors" *ngIf="hasError" class="error">
+    {{globalError}}
+  </div>
+  <div *ngIf="hasError && hasFieldError('id')" class="error">
+    {{fieldError("id")}}
+  </div>
   <div *ngIf="user != null">
     <h2>{{user.name}}</h2>
     <div><label>id: {{user.id}}</label></div>
     <div>
       <label>name: </label>
-      <input [(ngModel)]="user.name" placeholder="name">
-      <p class="error" *ngIf="error_message != null">{{error_message["name"]}} </p>
+      <input #name value="{{user.name}}" placeholder="name">
+      <p class="error" *ngIf="hasError && hasFieldError('name')">
+        {{fieldError("name")}}
+      </p>
     </div>
     <div>
       <label>age: </label>
-      <input [(ngModel)]="user.age" placeholder="age">
-      <p class="error" *ngIf="error_message != null">{{error_message["age"]}} </p>
+      <input #age value="{{user.age}}" placeholder="age">
+      <p class="error" *ngIf="hasError && hasFieldError('age')">
+        {{fieldError("age")}}
+      </p>
     </div>
     <div>
       <label>email_id: </label>
-      <input [(ngModel)]="user.email_id" placeholder="email_id">
-      <p class="error" *ngIf="error_message != null">{{error_message["email_id"]}} </p>
+      <input #emailId value="{{user.email_id}}" placeholder="email_id">
+      <p class="error" *ngIf="hasError && hasFieldError('email_id')">
+        {{fieldError("email_id")}}
+      </p>
     </div>
     <div>
-      <button (click)="save()">Save</button>
+      <button (click)="save(name.value, age.value, emailId.value)">Save</button>
       <button (click)="goBack()">Back</button>
     </div>
   </div>

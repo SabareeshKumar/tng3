@@ -12,9 +12,14 @@ class UserService {
 
   static const _usersUrl = '/api/users';
   static final _headers = {'Content-Type': 'application/json'};
+  final Client _http;  
 
-  final Client _http;
+  String _globalError = "";
+  Map<String, String> _fieldErrors = {};
 
+  String get globalError => _globalError;
+  Map<String, String> get fieldErrors => _fieldErrors;
+  
   UserService(this._http);
   
   Future<List<User>> getAll() async {
@@ -34,7 +39,7 @@ class UserService {
   getErrorMessage(Response resp) {
     var response = json.decode(resp.body);
     if (response.containsKey('errors')) {
-        return response['errors'];
+      return response['errors'];
     }
   }
   
@@ -42,22 +47,37 @@ class UserService {
     print(e);
     return Exception('Server error; cause: $e');
   }
-  
-  add(String name, String age, String email_id) async {
-      var response;
-      try {
-          response = await _http.post(_usersUrl,
-                                      headers: _headers,
-                                      body: json.encode({"name": name,
-                                                         "age": age,
-                                                         "email_id": email_id}));
-          return getErrorMessage(response);
-      
-      } catch (e) {
-          throw _handleError(e);
-      }
+
+  _extractErrorResponse(Response resp) {
+    _globalError = "${resp.statusCode} : ${resp.reasonPhrase}";
+    final errorList = json.decode(resp.body)["errors"];
+    _fieldErrors.clear();
+    for (var e in errorList) {
+      _fieldErrors[e["name"]] = e["description"];
+    }
   }
 
+  Future<bool> add(String name, String age, String email_id) async {
+    var response;
+    var data = json.encode({"name": name,
+                            "age": age,
+                            "email_id": email_id});
+    try {
+      response = await _http.post(
+        _usersUrl,
+        headers: _headers,
+        body: data);
+      
+      if (response.statusCode == 200) {
+        return true;
+      }
+      _extractErrorResponse(response);
+    } catch (e) {
+      print("Error occurred while adding user: $e");
+    }
+    return false;
+  }
+  
   delete(User user) async {
     try {
       final url = '$_usersUrl/${user.id}';
@@ -71,26 +91,35 @@ class UserService {
     try {
       final url = '$_usersUrl/$id';
       final response = await _http.get(url);
-      var error_message = getErrorMessage(response);
-      if (error_message != null) {
-          return error_message;
+      if (response.statusCode == 200) {
+        final User user = User.fromJson(_extractData(response));
+        return user;
       }
-      final User user = User.fromJson(_extractData(response));
-      return user;
+      _extractErrorResponse(response);
     } catch (e) {
-      throw _handleError(e);
+      print("Error occurred while retrieving user: $e");
     }
+    return null;
   }
   
-   update(User user) async {
-       var response;
-       try {
-      final url = '$_usersUrl/${user.id}';
-      response = await _http.put(url, headers: _headers, body: json.encode(user));
-      return getErrorMessage(response);
+  Future<bool> update(int id, String name, String age, String emailId) async {
+    var response;
+    try {
+      final url = '$_usersUrl/$id';
+      var data = json.encode({"name": name,
+                              "age": age,
+                              "email_id": emailId});
+      response = await _http.put(
+        url,
+        headers: _headers,
+        body: data);
+      if (response.statusCode == 200) {
+        return true;
+      }
+      _extractErrorResponse(response);
     } catch (e) {
-        print(json.decode(response.body));
-      throw _handleError(e);
+      print("Error occurred while updating user: $e");
     }
+    return false;
   }
 }

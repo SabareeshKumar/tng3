@@ -14,23 +14,34 @@ import 'route_paths.dart';
   
 )
 class AddUserComponent {
+  final UserService _userService;
+  final Router _router;
+
+  bool hasError = false;
+  String globalError;
+  Map<String, String> _fieldErrors;
   
-    Map<String, dynamic> error_message = {};
-    final UserService _userService;
-    final Router _router;
-    
-    AddUserComponent(this._userService, this._router);
+
+  AddUserComponent(this._userService, this._router);
   
-    void add(String name, String age, String email_id) async {
-        var response  = await _userService.add(name, age, email_id);
-        if (response == null) {
-            var home_route = RoutePaths.users
-                .toUrl(parameters: {});
-            _router.navigate(home_route);
-        } else {
-            response.forEach((dict) =>
-                             error_message[dict['name']] = dict['description']);
-        }
+  void add(String name, String age, String email_id) async {
+    final res = await _userService.add(name, age, email_id);
+    if (res) {
+      hasError = false;
+      var home_route = RoutePaths.users.toUrl();
+      _router.navigate(home_route);
+      return;
     }
+    hasError = true;
+    globalError = _userService.globalError;
+    _fieldErrors = _userService.fieldErrors;
+  }
+
+  bool hasFieldError(String fieldName) {
+    return _fieldErrors.containsKey(fieldName);
+  }
+
+  String fieldError(String fieldName) => _fieldErrors[fieldName];
+  
 }
 	

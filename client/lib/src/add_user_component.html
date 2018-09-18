@@ -1,8 +1,30 @@
 <div>
   <h3> Add User </h3>
-  <label>user name:</label> <input #userName /><div class="error" *ngIf="error_message != null">{{error_message["name"]}} </div>
-  <label>age:</label> <input #age/><div class="error" *ngIf="error_message != null">{{error_message["age"]}} </div>
-  <label>email id:</label> <input #mailId /><div class="error" *ngIf="error_message != null">{{error_message["email_id"]}} </div>
+  <div id="global_errors" *ngIf="hasError" class="error">
+    {{globalError}}
+  </div>
+  <div>
+    <label>user name:</label>
+    <input #userName />
+    <div class="error" *ngIf="hasError && hasFieldError('name')">
+      {{fieldError("name")}}
+    </div>
+  </div>
+  <div>
+    <label>age:</label>
+    <input #age />
+    <div class="error" *ngIf="hasError && hasFieldError('age')">
+      {{fieldError("age")}}
+    </div>
+  </div>
+  <div>
+    <label>email id:</label>
+    <input #mailId />
+    <div class="error" *ngIf="hasError && hasFieldError('email_id')">
+      {{fieldError("email_id")}}
+    </div>
+  </div>
+
   <button (click)="add(userName.value, age.value, mailId.value)">
     Add
   </button>
