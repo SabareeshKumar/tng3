@@ -4,6 +4,7 @@ import 'package:angular_router/angular_router.dart';
 
 import 'user.dart';
 import 'user_service.dart';
+import 'route_paths.dart';
 
 @Component(
   selector: 'add-user',
@@ -16,16 +17,16 @@ class AddUserComponent {
   
     Map<String, dynamic> error_message = {};
     final UserService _userService;
-    final Location _location;
-
-    AddUserComponent(this._userService, this._location);
-
-    void _goBack() => _location.back();
+    final Router _router;
+    
+    AddUserComponent(this._userService, this._router);
   
     void add(String name, String age, String email_id) async {
         var response  = await _userService.add(name, age, email_id);
         if (response == null) {
-            _goBack();
+            var home_route = RoutePaths.users
+                .toUrl(parameters: {});
+            _router.navigate(home_route);
         } else {
             response.forEach((dict) =>
                              error_message[dict['name']] = dict['description']);

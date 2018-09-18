@@ -15,31 +15,31 @@ import 'edit_user_component.dart';
 )
 class ListUserComponent implements OnInit {
   
-  List<User> users;
+    List<User> users;
 
-  final UserService _userService;
+    final UserService _userService;
 
-  final Router _router;
+    final Router _router;
   
-  User selected;
+    User selected;
   
-  ListUserComponent(this._userService, this._router);
+    ListUserComponent(this._userService, this._router);
   
-  void ngOnInit() async {
-    users = await _userService.getAll();
-  }
+    void ngOnInit() async {
+        users = await _userService.getAll();
+    }
        
-  void onSelect(User user) {
-       selected = user;
-       var edit_route = RoutePaths.edit
-           .toUrl(parameters: {idParam: '${selected.id}'});
-       _router.navigate(edit_route);
-  }
+    void onSelect(User user) {
+        selected = user;
+        var edit_route = RoutePaths.edit
+            .toUrl(parameters: {idParam: '${selected.id}'});
+        _router.navigate(edit_route);
+    }
 
-  void delete(User user) async {
-       await _userService.delete(user);
-       selected = null;
-       users = await _userService.getAll();
-  }  
+    void delete(User user) async {
+        await _userService.delete(user);
+        selected = null;
+        users = await _userService.getAll();
+    }  
 }
 	
