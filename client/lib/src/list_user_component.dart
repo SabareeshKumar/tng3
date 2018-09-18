@@ -31,12 +31,15 @@ class ListUserComponent implements OnInit {
        
   void onSelect(User user) {
        selected = user;
-       _router.navigate(RoutePaths.edit.toUrl(parameters: {idParam: '${selected.id}'}));
+       var edit_route = RoutePaths.edit
+           .toUrl(parameters: {idParam: '${selected.id}'});
+       _router.navigate(edit_route);
   }
 
   void delete(User user) async {
-       users = await _userService.delete(user);
+       await _userService.delete(user);
        selected = null;
+       users = await _userService.getAll();
   }  
 }
 	

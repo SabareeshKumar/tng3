@@ -34,7 +34,7 @@ class UserService {
   getErrorMessage(Response resp) {
     var response = json.decode(resp.body);
     if (response.containsKey('errors')) {
-       return response['errors'];
+        return response['errors'];
     }
   }
   
@@ -51,7 +51,6 @@ class UserService {
                                       body: json.encode({"name": name,
                                                          "age": age,
                                                          "email_id": email_id}));
-          
           return getErrorMessage(response);
       
       } catch (e) {
@@ -59,23 +58,23 @@ class UserService {
       }
   }
 
-  Future<List<User>> delete(User user) async {
+  delete(User user) async {
     try {
       final url = '$_usersUrl/${user.id}';
       final response = await _http.delete(url, headers: _headers);
-      final users = (_extractData(response) as List)
-        .map((json) => User.fromJson(json))
-        .toList();
-      return users;
     } catch (e) {
       throw _handleError(e);
     }
   }
   
-  Future<User> get(int id) async {
+  get(dynamic id) async {
     try {
       final url = '$_usersUrl/$id';
       final response = await _http.get(url);
+      var error_message = getErrorMessage(response);
+      if (error_message != null) {
+          return error_message;
+      }
       final User user = User.fromJson(_extractData(response));
       return user;
     } catch (e) {
@@ -84,11 +83,13 @@ class UserService {
   }
   
    update(User user) async {
-    try {
+       var response;
+       try {
       final url = '$_usersUrl/${user.id}';
-      final response = await _http.put(url, headers: _headers, body: json.encode(user));
+      response = await _http.put(url, headers: _headers, body: json.encode(user));
       return getErrorMessage(response);
     } catch (e) {
+        print(json.decode(response.body));
       throw _handleError(e);
     }
   }

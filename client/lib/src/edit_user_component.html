@@ -1,23 +1,26 @@
-<div *ngIf="user != null">
-  <h2>{{user.name}}</h2>
-  <div><label>id: {{user.id}}</label></div>
-  <div>
-    <label>name: </label>
-    <input [(ngModel)]="user.name" placeholder="name">
-    <p class="error" *ngIf="error_message != null">{{error_message["name"]}} </p>
-  </div>  
-  <div>
-    <label>age: </label>
-    <input [(ngModel)]="user.age" placeholder="age">
-    <p class="error" *ngIf="error_message != null">{{error_message["age"]}} </p>
-  </div>
-  <div>
-    <label>email_id: </label>
-    <input [(ngModel)]="user.email_id" placeholder="email_id">
-    <p class="error" *ngIf="error_message != null">{{error_message["email_id"]}} </p>
-  </div>
-  <div>
-    <button (click)="save()">Save</button>
-    <button (click)="goBack()">Back</button>
+<div>
+  <div *ngIf="error_message != null" class="error">{{error_message["id"]}}</div>
+  <div *ngIf="user != null">
+    <h2>{{user.name}}</h2>
+    <div><label>id: {{user.id}}</label></div>
+    <div>
+      <label>name: </label>
+      <input [(ngModel)]="user.name" placeholder="name">
+      <p class="error" *ngIf="error_message != null">{{error_message["name"]}} </p>
+    </div>
+    <div>
+      <label>age: </label>
+      <input [(ngModel)]="user.age" placeholder="age">
+      <p class="error" *ngIf="error_message != null">{{error_message["age"]}} </p>
+    </div>
+    <div>
+      <label>email_id: </label>
+      <input [(ngModel)]="user.email_id" placeholder="email_id">
+      <p class="error" *ngIf="error_message != null">{{error_message["email_id"]}} </p>
+    </div>
+    <div>
+      <button (click)="save()">Save</button>
+      <button (click)="goBack()">Back</button>
+    </div>
   </div>
 </div>

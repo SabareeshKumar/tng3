@@ -11,14 +11,19 @@ import 'list_user_component.dart';
   selector: 'my-user',
   templateUrl: 'edit_user_component.html',
   styleUrls: ['edit_user_component.css'],
-  directives: [coreDirectives, formDirectives, ListUserComponent],
+  directives: [
+               coreDirectives,
+               formDirectives,
+               ListUserComponent,
+               routerDirectives,
+               ],
 )
 class EditUserComponent implements OnActivate {
   
   User user;
 
   final UserService _userService;
-  Map<String, dynamic> error_message;
+  Map<String, dynamic> error_message = {};
   final Location _location;
   final Router _router;
   
@@ -26,18 +31,28 @@ class EditUserComponent implements OnActivate {
   
   @override
   void onActivate(_, RouterState current) async {
-    final id = getId(current.parameters);
+    final id = getId(current.parameters);    
     if (id != null) {
-      user = await _userService.get(id);
+      var response = await _userService.get(id);
+      if (response is User) {
+          user = response;
+      } else {
+          response.forEach((dict) =>
+                             error_message[dict['name']] = dict['description']);
+          user = null;
+      }
     }
   }
 
   void goBack() => _location.back();
 
   void save() async {
-       error_message = await _userService.update(user);
-       if (error_message == null) {
-         _router.navigate(RoutePaths.users.toUrl());
+       var response = await _userService.update(user);
+       if (response == null) {
+           goBack();
+       } else {
+           response.forEach((dict) =>
+                            error_message[dict['name']] = dict['description']);
        }
   }
 }
