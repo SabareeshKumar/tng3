@@ -58,7 +58,7 @@ class UserService {
     }
   }
 
-  Future<bool> add(String name, String age, String emailId) async {
+  Future<bool> add(String name, int age, String emailId) async {
     try {
       var data = json.encode({"name": name,
                               "age": age,
@@ -102,7 +102,7 @@ class UserService {
     return null;
   }
   
-  Future<bool> update(int id, String name, String age, String emailId) async {
+  Future<bool> update(int id, String name, int age, String emailId) async {
     try {
       final url = '$_usersUrl/$id';
       var data = json.encode({"name": name,

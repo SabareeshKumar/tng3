@@ -3,6 +3,7 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:angular_components/material_input/material_input.dart';
 import 'package:angular_components/material_button/material_button.dart';
+import 'package:angular_components/material_input/material_number_accessor.dart';
 
 import 'route_paths.dart';
 import 'user.dart';
@@ -17,13 +18,14 @@ import 'user_service.dart';
     coreDirectives,
     formDirectives,
     materialInputDirectives,
+    materialNumberInputDirectives,
     MaterialButtonComponent,
   ],  
 )
 class AddUserComponent {
   final UserService _userService;
   final Router _router;
-  Map<String, String> _fieldErrors;
+  Map<String, String> _fieldErrors = {};
   
   bool hasError = false;
   String globalError;
@@ -32,7 +34,7 @@ class AddUserComponent {
   String userName;
 
   @Input()
-  String age;
+  int age;
 
   @Input()
   String emailId;
@@ -40,19 +42,45 @@ class AddUserComponent {
   AddUserComponent(this._userService, this._router);
   
   void add() async {
-    final resp = await _userService.add(userName, age, emailId);
-    if (resp) {
-      hasError = false;
-      var homeRoute = RoutePaths.users.toUrl();
-      _router.navigate(homeRoute);
-      return;
+    if (isInputValid()) {
+      final resp = await _userService.add(userName, age, emailId);
+      if (resp) {
+        hasError = false;
+        var homeRoute = RoutePaths.users.toUrl();
+        _router.navigate(homeRoute);
+        return;
+      }
+      hasError = true;
+      globalError = _userService.globalError;
+      _fieldErrors = _userService.fieldErrors;
+    } else {
+      hasError = true;
+      globalError = "Please fill all the fields";
+      clearFieldErrors();
     }
-    hasError = true;
-    globalError = _userService.globalError;
-    _fieldErrors = _userService.fieldErrors;
-    //    if ( hasError && hasFieldError('name')) userName.error = fieldError('name');
   }
 
+  void clearFieldErrors() {
+      if (userName == null) {
+        _fieldErrors.remove('name');
+      }
+      if (age == null) {
+        _fieldErrors.remove('age');
+      }
+      if (emailId == null) {
+        _fieldErrors.remove('email_id');
+      }
+  }
+
+  bool isInputValid() {
+    if (userName != null
+        && age != null
+        && emailId != null) {
+      return true;
+    }
+    return false;
+  }
+  
   bool hasFieldError(String fieldName) {
     return _fieldErrors.containsKey(fieldName);
   }

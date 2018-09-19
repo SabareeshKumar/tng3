@@ -12,7 +12,7 @@
     </material-input>
     <material-input [(ngModel)]="age"
                     label="age"
-                    type="text"
+                    type="number"
                     error="{{getError('age')}}"
                     required>
     </material-input>
@@ -22,8 +22,9 @@
                     error="{{getError('email_id')}}"
                     required>
     </material-input>
+
+    <material-button (click)="add" raised>
+      Add
+    </material-button>
   </div>
-  <material-button (click)="add" raised>
-    Add
-  </material-button>
 </div>

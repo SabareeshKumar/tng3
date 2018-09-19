@@ -29,7 +29,7 @@ class EditUserComponent implements OnActivate {
   final UserService _userService;
   Router _router;
   Location _location;
-  Map<String, String> _fieldErrors;
+  Map<String, String> _fieldErrors = {};
 
   @Input()
   User user;
@@ -54,8 +54,6 @@ class EditUserComponent implements OnActivate {
     if (id != null) {
       final res = await _userService.get(id);
       if (res is User) {
-        print("###################");
-        print(res.name);
         user = res;
         hasError = false;
         return;
@@ -71,19 +69,47 @@ class EditUserComponent implements OnActivate {
   void goBack() => _location.back();
     
   void save() async {
-    final res = await _userService.update(user.id, user.name, user.age.toString(), user.emailId);
-    if (res) {
-      hasError = false;
-      var home_route = RoutePaths.users.toUrl();
-      _router.navigate(home_route);
-      return;
-    }
+    if (isInputValid()) {
+      final res = await _userService.update(user.id, user.name, user.age, user.emailId);
+      if (res) {
+        hasError = false;
+        var home_route = RoutePaths.users.toUrl();
+        _router.navigate(home_route);
+        return;
+      }
     
-    hasError = true;
-    globalError = _userService.globalError;
-    _fieldErrors = _userService.fieldErrors;
+      hasError = true;
+      globalError = _userService.globalError;
+      _fieldErrors = _userService.fieldErrors;
+    } else {
+      clearFieldErrors();
+    }
   }
 
+  void clearFieldErrors() {
+    if (user != null) {
+      if (user.name == null) {
+        _fieldErrors.remove('name');
+      }
+      if (user.age == null) {
+        _fieldErrors.remove('age');
+      }
+      if (user.emailId == null) {
+        _fieldErrors.remove('email_id');
+      }
+    }
+
+  }
+  bool isInputValid() {
+    if (user != null
+        && user.name != null
+        && user.age != null
+        && user.emailId != null) {
+      return true;
+    }
+    return false;
+  }
+  
   bool hasFieldError(String fieldName) {
     return _fieldErrors.containsKey(fieldName);
   }
