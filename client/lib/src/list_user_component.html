@@ -1,4 +1,10 @@
 <div>
+  <material-button [routerLink]="RoutePaths.add.toUrl()"
+                   [routerLinkActive]="'active'" raised>
+    Add User
+  </material-button>
+</div>
+<div>
   <ul class="users">
     <li *ngFor="let user of users"
         (click)="onSelect(user)">

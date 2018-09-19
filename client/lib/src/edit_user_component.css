@@ -2,3 +2,11 @@ div, material-input {
     float: left;
     clear: left;
 }
+.error {
+    display: inline-block;
+    width: 30em;
+    margin: .5em 0;
+    color:#B22222;
+    text-align: left;
+    float:left;
+}
