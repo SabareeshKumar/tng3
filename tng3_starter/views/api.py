@@ -14,10 +14,19 @@ class UserSchema(colander.MappingSchema):
     name = colander.SchemaNode(colander.String())
     age = colander.SchemaNode(colander.Int(),
                               validator=colander.Range(0, 200))
-    email_id = colander.SchemaNode(colander.String(), validator=colander.Email())
+    email_id = colander.SchemaNode(colander.String(),
+                                   validator=colander.Email())
 
-user_collection = Service(name='user_collection', path='/api/users', description="User registration")
-user = Service(name='user', path='/api/users/{id}', description="User registration")
+user_collection = Service(
+    name='user_collection',
+    path='/api/users',
+    description="User registration"
+)
+user = Service(
+    name='user',
+    path='/api/users/{id}',
+    description="User registration"
+)
 
 class IdSchema(colander.MappingSchema):
     id = colander.SchemaNode(colander.Int())

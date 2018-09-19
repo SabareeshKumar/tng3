@@ -13,16 +13,16 @@ class UserService {
   static const successCode = 200;
   static const _usersUrl = '/api/users';
   static final _headers = {'Content-Type': 'application/json'};
-  final Client _http;  
-  
+  final Client _http;
+
   String _globalError = "";
   Map<String, String> _fieldErrors = {};
 
   String get globalError => _globalError;
   Map<String, String> get fieldErrors => _fieldErrors;
-  
+
   UserService(this._http);
-  
+
   Future<List<User>> getAll() async {
     try {
       final response = await _http.get(_usersUrl);
@@ -43,7 +43,7 @@ class UserService {
       return response['errors'];
     }
   }
-  
+
   Exception _handleError(dynamic e) {
     print(e);
     return Exception('Server error; cause: $e');
@@ -67,7 +67,7 @@ class UserService {
         _usersUrl,
         headers: _headers,
         body: data);
-      
+
       if (response.statusCode == successCode) {
         return true;
       }
@@ -77,7 +77,7 @@ class UserService {
     }
     return false;
   }
-  
+
   delete(User user) async {
     try {
       final url = '$_usersUrl/${user.id}';
@@ -86,8 +86,8 @@ class UserService {
       throw _handleError(e);
     }
   }
-  
-  get(dynamic id) async {
+
+  Future<User> get(dynamic id) async {
     try {
       final url = '$_usersUrl/$id';
       final response = await _http.get(url);
@@ -101,7 +101,7 @@ class UserService {
     }
     return null;
   }
-  
+
   Future<bool> update(int id, String name, int age, String emailId) async {
     try {
       final url = '$_usersUrl/$id';

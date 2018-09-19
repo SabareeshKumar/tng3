@@ -20,27 +20,22 @@ import 'user_service.dart';
     materialInputDirectives,
     materialNumberInputDirectives,
     MaterialButtonComponent,
-  ],  
+  ],
 )
 class AddUserComponent {
   final UserService _userService;
   final Router _router;
   Map<String, String> _fieldErrors = {};
-  
+
   bool hasError = false;
   String globalError;
 
-  @Input()
   String userName;
-
-  @Input()
   int age;
-
-  @Input()
   String emailId;
-  
+
   AddUserComponent(this._userService, this._router);
-  
+
   void add() async {
     if (isInputValid()) {
       final resp = await _userService.add(userName, age, emailId);
@@ -80,7 +75,7 @@ class AddUserComponent {
     }
     return false;
   }
-  
+
   bool hasFieldError(String fieldName) {
     return _fieldErrors.containsKey(fieldName);
   }

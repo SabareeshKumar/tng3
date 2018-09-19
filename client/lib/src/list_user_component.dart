@@ -23,18 +23,19 @@ import 'user_service.dart';
   ],
 )
 class ListUserComponent implements OnInit {
-  
+
   final UserService _userService;
   final Router _router;
   List<User> users;
   User selected;
-  
+
   ListUserComponent(this._userService, this._router);
-  
+
   void ngOnInit() async {
+    print("ListUserComponent: ngOnInit");
     users = await _userService.getAll();
   }
-       
+
   void onSelect(User user) {
     selected = user;
     var editRoute = RoutePaths.edit
@@ -46,5 +47,5 @@ class ListUserComponent implements OnInit {
     await _userService.delete(user);
     selected = null;
     users = await _userService.getAll();
-  }  
+  }
 }

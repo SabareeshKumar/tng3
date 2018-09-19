@@ -25,59 +25,54 @@ import 'user_service.dart';
   ],
 )
 class EditUserComponent implements OnActivate {
-  
+
   final UserService _userService;
   Router _router;
   Location _location;
   Map<String, String> _fieldErrors = {};
 
-  @Input()
   User user;
-
-  // @Input()
-  // String userName;
-
-  // @Input()
-  // String age;
-
-  // @Input()
-  // String emailId;
 
   bool hasError = false;
   String globalError;
 
   EditUserComponent(this._userService, this._router, this._location);
-  
+
   @override
   void onActivate(_, RouterState current) async {
-    final id = getId(current.parameters);    
-    if (id != null) {
-      final res = await _userService.get(id);
-      if (res is User) {
-        user = res;
-        hasError = false;
-        return;
-      }
-      print(res);
-      hasError = true;
-      user = null;
-      globalError = _userService.globalError;
-      _fieldErrors = _userService.fieldErrors;
+    final id = getId(current.parameters);
+    if (id == null) {
+      return;
     }
+    final res = await _userService.get(id);
+    if (res is User) {
+      user = res;
+      hasError = false;
+      return;
+    }
+    hasError = true;
+    user = null;
+    globalError = _userService.globalError;
+    _fieldErrors = _userService.fieldErrors;
   }
 
   void goBack() => _location.back();
-    
+
   void save() async {
     if (isInputValid()) {
-      final res = await _userService.update(user.id, user.name, user.age, user.emailId);
+      final res = await _userService.update(
+        user.id,
+        user.name,
+        user.age,
+        user.emailId
+      );
       if (res) {
         hasError = false;
         var home_route = RoutePaths.users.toUrl();
         _router.navigate(home_route);
         return;
       }
-    
+
       hasError = true;
       globalError = _userService.globalError;
       _fieldErrors = _userService.fieldErrors;
@@ -109,7 +104,7 @@ class EditUserComponent implements OnActivate {
     }
     return false;
   }
-  
+
   bool hasFieldError(String fieldName) {
     return _fieldErrors.containsKey(fieldName);
   }
