@@ -22,7 +22,7 @@ import 'user_service.dart';
     routerDirectives,
   ],
 )
-class ListUserComponent implements OnInit {
+class ListUserComponent implements OnActivate, OnInit {
 
   final UserService _userService;
   final Router _router;
@@ -32,7 +32,11 @@ class ListUserComponent implements OnInit {
   ListUserComponent(this._userService, this._router);
 
   void ngOnInit() async {
-    print("ListUserComponent: ngOnInit");
+    users = await _userService.getAll();
+  }
+
+  @override
+  void onActivate(_, RouterState current) async {
     users = await _userService.getAll();
   }
 
