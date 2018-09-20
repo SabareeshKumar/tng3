@@ -1,14 +1,10 @@
 from cornice import Service
-from pyramid.renderers import render_to_response
-from pyramid.response import Response
 from cornice.validators import colander_body_validator, colander_path_validator
-from pyramid.view import view_config
 
 from ..models import User
 
 import colander
-import json
-import logging
+
 
 class UserSchema(colander.MappingSchema):
     name = colander.SchemaNode(colander.String())
@@ -16,6 +12,7 @@ class UserSchema(colander.MappingSchema):
                               validator=colander.Range(0, 200))
     email_id = colander.SchemaNode(colander.String(),
                                    validator=colander.Email())
+
 
 user_collection = Service(
     name='user_collection',
@@ -28,8 +25,10 @@ user = Service(
     description="User registration"
 )
 
+
 class IdSchema(colander.MappingSchema):
     id = colander.SchemaNode(colander.Int())
+
 
 @user_collection.get()
 def get_users(request):
@@ -37,12 +36,15 @@ def get_users(request):
     user_list = request.dbsession.query(User).filter().all()
     return {'data': user_list}
 
-@user_collection.post(schema=UserSchema(), validators=(colander_body_validator,))
+
+@user_collection.post(schema=UserSchema(),
+                      validators=(colander_body_validator,))
 def create_user(request):
     """Adds a new user."""
     user = User(request.validated)
     request.dbsession.add(user)
     return {'data': user}
+
 
 @user.delete()
 def delete_user(request):
@@ -55,7 +57,8 @@ def delete_user(request):
         user.delete()
     return None
 
-@user.get(schema = IdSchema(), validators=(colander_path_validator,))
+
+@user.get(schema=IdSchema(), validators=(colander_path_validator,))
 def get_user(request):
     id = request.validated['id']
     query = request.dbsession.query(User)
@@ -64,6 +67,7 @@ def get_user(request):
         request.errors.add("header", "id", "User does not exist!")
         return None
     return {'data': user}
+
 
 @user.put(schema=UserSchema(), validators=(colander_body_validator,))
 def update_user(request):

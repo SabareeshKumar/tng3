@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:convert';
 
-import 'package:angular/angular.dart';
 import 'package:http/http.dart';
 
-import 'route_paths.dart';
 import 'user.dart';
 
 class UserService {
@@ -81,7 +78,7 @@ class UserService {
   delete(User user) async {
     try {
       final url = '$_usersUrl/${user.id}';
-      final response = await _http.delete(url, headers: _headers);
+      await _http.delete(url, headers: _headers);
     } catch (e) {
       throw _handleError(e);
     }

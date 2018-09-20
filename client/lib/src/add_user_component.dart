@@ -6,7 +6,6 @@ import 'package:angular_components/material_button/material_button.dart';
 import 'package:angular_components/material_input/material_number_accessor.dart';
 
 import 'route_paths.dart';
-import 'user.dart';
 import 'user_service.dart';
 
 @Component(
@@ -80,13 +79,15 @@ class AddUserComponent {
   String fieldError(String fieldName) => _fieldErrors[fieldName];
 
   String getError(String fieldName) {
+    String errorMsg;
     if (hasError && hasFieldError(fieldName)) {
-      return fieldError(fieldName);
+      errorMsg = fieldError(fieldName);
     }
     if (age != null && fieldName == 'age') {
       if (int.tryParse(age) == null) {
-        return "Please enter a number";
+        errorMsg = "Please enter a number";
       }
     }
+    return errorMsg;
   }
 }

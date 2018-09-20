@@ -1,12 +1,10 @@
 from sqlalchemy import (
     Column,
-    Index,
     Integer,
     Text,
 )
-
 from .meta import Base
-from json import JSONEncoder
+
 
 class User(Base):
     __tablename__ = 'user'

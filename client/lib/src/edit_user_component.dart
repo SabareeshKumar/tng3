@@ -109,13 +109,15 @@ class EditUserComponent implements OnActivate {
   String fieldError(String fieldName) => _fieldErrors[fieldName];
 
   String getError(String fieldName) {
+    String errorMsg;
     if (hasError && hasFieldError(fieldName)) {
-      return fieldError(fieldName);
+      errorMsg = fieldError(fieldName);
     }
     if (age != null && fieldName == 'age') {
       if (int.tryParse(age) == null) {
-        return "Please enter a number";
+        errorMsg = "Please enter a number";
       }
     }
+    return errorMsg;
   }
 }
