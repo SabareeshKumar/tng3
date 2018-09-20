@@ -31,49 +31,46 @@ class AddUserComponent {
   String globalError;
 
   String userName;
-  int age;
+  String age;
   String emailId;
+
+  @ViewChild("addUserForm")
+  NgForm addUserForm;
 
   AddUserComponent(this._userService, this._router);
 
   void add() async {
-    if (isInputValid()) {
-      final resp = await _userService.add(userName, age, emailId);
-      if (resp) {
-        hasError = false;
-        var homeRoute = RoutePaths.users.toUrl();
-        _router.navigate(homeRoute);
-        return;
-      }
-      hasError = true;
-      globalError = _userService.globalError;
-      _fieldErrors = _userService.fieldErrors;
-    } else {
-      hasError = true;
-      globalError = "Please fill all the fields";
-      clearFieldErrors();
+    int iage = int.tryParse(age);
+    final resp = await _userService.add(userName, iage, emailId);
+    if (resp) {
+      hasError = false;
+      var homeRoute = RoutePaths.users.toUrl();
+      _router.navigate(homeRoute);
+      return;
     }
+    hasError = true;
+    globalError = _userService.globalError;
+    _fieldErrors = _userService.fieldErrors;
   }
-
   void clearFieldErrors() {
-      if (userName == null) {
-        _fieldErrors.remove('name');
-      }
-      if (age == null) {
-        _fieldErrors.remove('age');
-      }
-      if (emailId == null) {
-        _fieldErrors.remove('email_id');
-      }
+    _fieldErrors.clear();
   }
 
-  bool isInputValid() {
-    if (userName != null
-        && age != null
-        && emailId != null) {
+  bool canAdd() {
+    if (addUserForm.dirty
+        && addUserForm.valid
+        && (int.tryParse(age) != null)) {
+
       return true;
     }
     return false;
+  }
+
+  void clearForm() {
+    userName = null;
+    age = null;
+    emailId = null;
+    addUserForm.reset();
   }
 
   bool hasFieldError(String fieldName) {
@@ -85,6 +82,11 @@ class AddUserComponent {
   String getError(String fieldName) {
     if (hasError && hasFieldError(fieldName)) {
       return fieldError(fieldName);
+    }
+    if (age != null && fieldName == 'age') {
+      if (int.tryParse(age) == null) {
+        return "Please enter a number";
+      }
     }
   }
 }

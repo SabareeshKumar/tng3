@@ -4,27 +4,42 @@
     {{globalError}}
   </div>
   <div>
-    <material-input [(ngModel)]="userName"
-                    label="user name"
-                    type="text"
-                    error="{{getError('name')}}"
-                    required>
-    </material-input>
-    <material-input [(ngModel)]="age"
-                    label="age"
-                    type="number"
-                    error="{{getError('age')}}"
-                    required>
-    </material-input>
-    <material-input [(ngModel)]="emailId"
-                    label="email id"
-                    type="text"
-                    error="{{getError('email_id')}}"
-                    required>
-    </material-input>
+    <div id="content" #myDiv></div>
 
-    <material-button (click)="add" raised>
-      Add
-    </material-button>
+    <form #addUserForm="ngForm">
+      <material-input [(ngModel)]="userName"
+                      ngControl="userName"
+                      #userNameInput="ngForm"
+                      label="user name"
+                      type="text"
+                      error="{{getError('name')}}"
+                      required>
+      </material-input>
+      <material-input [(ngModel)]="age"
+                      ngControl="ageIp"
+                      #ageInput="ngForm"
+                      label="age"
+                      type="text"
+                      error="{{getError('age')}}"
+                      required>
+      </material-input>
+      <material-input [(ngModel)]="emailId"
+                      ngControl="emailId"
+                      #emailIdInput="ngForm"
+                      label="email id"
+                      type="text"
+                      error="{{getError('email_id')}}"
+                      required>
+      </material-input>
+      <div>
+        <material-button (click)="clearFieldErrors()"
+                         (trigger)="add()"
+                         [disabled]="!canAdd()"
+                         raised>
+          Add
+        </material-button>
+        <material-button (click)="clearForm()"> Clear </material-button>
+      </div>
+    </form>
   </div>
 </div>

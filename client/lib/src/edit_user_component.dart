@@ -32,9 +32,12 @@ class EditUserComponent implements OnActivate {
   Map<String, String> _fieldErrors = {};
 
   User user;
-
+  String age;
   bool hasError = false;
   String globalError;
+
+  @ViewChild("editUserForm")
+  NgForm editUserForm;
 
   EditUserComponent(this._userService, this._router, this._location);
 
@@ -59,50 +62,44 @@ class EditUserComponent implements OnActivate {
   void goBack() => _location.back();
 
   void save() async {
-    if (isInputValid()) {
-      final res = await _userService.update(
-        user.id,
-        user.name,
-        user.age,
-        user.emailId
-      );
-      if (res) {
-        hasError = false;
-        var home_route = RoutePaths.users.toUrl();
-        _router.navigate(home_route);
-        return;
-      }
-
-      hasError = true;
-      globalError = _userService.globalError;
-      _fieldErrors = _userService.fieldErrors;
-    } else {
-      clearFieldErrors();
+    final res = await _userService.update(
+      user.id,
+      user.name,
+      user.age,
+      user.emailId
+    );
+    if (res) {
+      hasError = false;
+      var home_route = RoutePaths.users.toUrl();
+      _router.navigate(home_route);
+      return;
     }
+
+    hasError = true;
+    globalError = _userService.globalError;
+    _fieldErrors = _userService.fieldErrors;
+  }
+
+
+  bool canAdd() {
+    if (editUserForm != null) {
+      if (age != null && editUserForm.valid
+          && (int.tryParse(age) != null)) {
+        return true;
+      }
+      return false;
+
+    }
+    return false;
+  }
+
+  void clearForm() {
+    age = null;
+    editUserForm.reset();
   }
 
   void clearFieldErrors() {
-    if (user != null) {
-      if (user.name == null) {
-        _fieldErrors.remove('name');
-      }
-      if (user.age == null) {
-        _fieldErrors.remove('age');
-      }
-      if (user.emailId == null) {
-        _fieldErrors.remove('email_id');
-      }
-    }
-
-  }
-  bool isInputValid() {
-    if (user != null
-        && user.name != null
-        && user.age != null
-        && user.emailId != null) {
-      return true;
-    }
-    return false;
+    _fieldErrors.clear();
   }
 
   bool hasFieldError(String fieldName) {
@@ -114,6 +111,11 @@ class EditUserComponent implements OnActivate {
   String getError(String fieldName) {
     if (hasError && hasFieldError(fieldName)) {
       return fieldError(fieldName);
+    }
+    if (age != null && fieldName == 'age') {
+      if (int.tryParse(age) == null) {
+        return "Please enter a number";
+      }
     }
   }
 }

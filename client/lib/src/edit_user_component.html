@@ -8,27 +8,47 @@
   <div *ngIf="user != null">
     <h2>{{user.name}}</h2>
     <div>
-      <material-input [(ngModel)]="user.name"
-                      label="user name" type="text"
-                      error="{{getError('name')}}"
-                      required>
-      </material-input>
-      <material-input [(ngModel)]="user.age"
-                      label="age"
-                      type="number"
-                      error="{{getError('age')}}"
-                      required>
-      </material-input>
-      <material-input [(ngModel)]="user.emailId"
-                      label="email id"
-                      type="text"
-                      error="{{getError('email_id')}}"
-                      required>
-      </material-input>
-    </div>
-    <div id="buttons">
-      <material-button (click)="save()" raised>Save</material-button>
-      <material-button (click)="goBack()" raised>Back</material-button>
+      <form #editUserForm="ngForm">
+        <material-input [(ngModel)]="user.name"
+                        ngControl="userName"
+                        #userNameInput="ngForm"
+                        label="user name" type="text"
+                        error="{{getError('name')}}"
+                        required>
+        </material-input>
+        <material-input [ngModel]="user.age.toString()"
+                        (ngModelChange)="age=$event"
+                        ngControl="age"
+                        #ageInput="ngForm"
+                        label="age"
+                        type="text"
+                        error="{{getError('age')}}"
+                        required>
+        </material-input>
+        <material-input [(ngModel)]="user.emailId"
+                        ngControl="emailId"
+                        #emailIdInput="ngForm"
+                        label="email id"
+                        type="text"
+                        error="{{getError('email_id')}}"
+                        required>
+        </material-input>
+        <div>
+          <material-button (click)="clearFieldErrors()"
+                           (trigger)="save()"
+                           [disabled]="!canAdd()"
+                           raised>
+            Save
+          </material-button>
+          <material-button (click)="clearForm()">
+            Clear
+          </material-button>
+          <material-button (click)="goBack()"
+                           raised>
+            Back
+          </material-button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
