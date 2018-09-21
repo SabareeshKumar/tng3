@@ -19,7 +19,7 @@
                       ngControl="ageIp"
                       #ageInput="ngForm"
                       label="age"
-                      type="text"
+                      type="number"
                       error="{{getError('age')}}"
                       required>
       </material-input>
@@ -34,7 +34,7 @@
       <div>
         <material-button (click)="clearFieldErrors()"
                          (trigger)="add()"
-                         [disabled]="!canAdd()"
+                         [disabled]="!addUserForm.form.valid"
                          raised>
           Add
         </material-button>

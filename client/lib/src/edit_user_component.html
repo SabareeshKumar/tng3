@@ -16,14 +16,14 @@
                         error="{{getError('name')}}"
                         required>
         </material-input>
-        <material-input [ngModel]="user.age.toString()"
-                        (ngModelChange)="age=$event"
+        <material-input [(ngModel)]="user.age"
                         ngControl="age"
                         #ageInput="ngForm"
                         label="age"
-                        type="text"
+                        type="number"
                         error="{{getError('age')}}"
                         required>
+
         </material-input>
         <material-input [(ngModel)]="user.emailId"
                         ngControl="emailId"
@@ -36,12 +36,13 @@
         <div>
           <material-button (click)="clearFieldErrors()"
                            (trigger)="save()"
-                           [disabled]="!canAdd()"
+                           [disabled]="!editUserForm.form.valid"
                            raised>
             Save
           </material-button>
-          <material-button (click)="clearForm()">
-            Clear
+          <material-button (click)="resetForm()"
+                           raised>
+            Reset
           </material-button>
           <material-button (click)="goBack()"
                            raised>

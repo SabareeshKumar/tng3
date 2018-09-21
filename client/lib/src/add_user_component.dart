@@ -3,8 +3,8 @@ import 'package:angular_forms/angular_forms.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:angular_components/material_input/material_input.dart';
 import 'package:angular_components/material_button/material_button.dart';
-import 'package:angular_components/material_input/material_number_accessor.dart';
 
+import 'number_validator.dart';
 import 'route_paths.dart';
 import 'user_service.dart';
 
@@ -17,8 +17,8 @@ import 'user_service.dart';
     coreDirectives,
     formDirectives,
     materialInputDirectives,
-    materialNumberInputDirectives,
     MaterialButtonComponent,
+    NumberValidator,
   ],
 )
 class AddUserComponent {
@@ -53,23 +53,12 @@ class AddUserComponent {
   }
   void clearFieldErrors() {
     _fieldErrors.clear();
-  }
-
-  bool canAdd() {
-    if (addUserForm.dirty
-        && addUserForm.valid
-        && (int.tryParse(age) != null)) {
-
-      return true;
-    }
-    return false;
+    globalError = null;
   }
 
   void clearForm() {
-    userName = null;
-    age = null;
-    emailId = null;
     addUserForm.reset();
+    clearFieldErrors();
   }
 
   bool hasFieldError(String fieldName) {
@@ -82,11 +71,6 @@ class AddUserComponent {
     String errorMsg;
     if (hasError && hasFieldError(fieldName)) {
       errorMsg = fieldError(fieldName);
-    }
-    if (age != null && fieldName == 'age') {
-      if (int.tryParse(age) == null) {
-        errorMsg = "Please enter a number";
-      }
     }
     return errorMsg;
   }

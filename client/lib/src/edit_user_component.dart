@@ -20,8 +20,8 @@ import 'user_service.dart';
     ListUserComponent,
     routerDirectives,
     materialInputDirectives,
-    materialNumberInputDirectives,
     MaterialButtonComponent,
+    materialNumberInputDirectives,
   ],
 )
 class EditUserComponent implements OnActivate {
@@ -29,12 +29,15 @@ class EditUserComponent implements OnActivate {
   final UserService _userService;
   Router _router;
   Location _location;
-  Map<String, String> _fieldErrors = {};
 
-  User user;
-  String age;
+  Map<String, String> _fieldErrors = {};
   bool hasError = false;
   String globalError;
+
+  User user;
+  User originalUser;
+
+  String age;
 
   @ViewChild("editUserForm")
   NgForm editUserForm;
@@ -50,6 +53,7 @@ class EditUserComponent implements OnActivate {
     final res = await _userService.get(id);
     if (res is User) {
       user = res;
+      originalUser = User.from(user);
       hasError = false;
       return;
     }
@@ -58,7 +62,6 @@ class EditUserComponent implements OnActivate {
     globalError = _userService.globalError;
     _fieldErrors = _userService.fieldErrors;
   }
-
   void goBack() => _location.back();
 
   void save() async {
@@ -80,26 +83,14 @@ class EditUserComponent implements OnActivate {
     _fieldErrors = _userService.fieldErrors;
   }
 
-
-  bool canAdd() {
-    if (editUserForm != null) {
-      if (age != null && editUserForm.valid
-          && (int.tryParse(age) != null)) {
-        return true;
-      }
-      return false;
-
-    }
-    return false;
-  }
-
-  void clearForm() {
-    age = null;
-    editUserForm.reset();
+  void resetForm() {
+    user.copy(originalUser);
+    clearFieldErrors();
   }
 
   void clearFieldErrors() {
     _fieldErrors.clear();
+    globalError = null;
   }
 
   bool hasFieldError(String fieldName) {
@@ -112,11 +103,6 @@ class EditUserComponent implements OnActivate {
     String errorMsg;
     if (hasError && hasFieldError(fieldName)) {
       errorMsg = fieldError(fieldName);
-    }
-    if (age != null && fieldName == 'age') {
-      if (int.tryParse(age) == null) {
-        errorMsg = "Please enter a number";
-      }
     }
     return errorMsg;
   }
