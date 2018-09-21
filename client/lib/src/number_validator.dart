@@ -1,13 +1,13 @@
 import 'package:angular/angular.dart';
 import 'package:angular_forms/angular_forms.dart';
 
-const NUMBER_VALIDATOR = const Provider(NG_VALIDATORS,
+const NUMBER_VALIDATOR =  Provider(NG_VALIDATORS,
                                         useExisting: NumberValidator,
                                         multi: true);
 
 @Directive(
   selector: "[type=number]",
-  providers: const [NUMBER_VALIDATOR]
+  providers: [NUMBER_VALIDATOR]
 )
 class NumberValidator implements Validator {
   static Map<String, String> errorMsg = {"value_error": "Enter a number"};
